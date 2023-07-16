@@ -1,14 +1,15 @@
 [tool.poetry]
 name = "hh-parser"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = "Dmitry Kaptan (Kaverz1n)"
 readme = "README.md"
 packages = [{include = "hh_parser"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "^2.31.0"
+psycopg2 = "^2.9.6"
 
 
 [build-system]
