@@ -1,7 +1,6 @@
 import requests
 
 from src.employer import Employer
-from src.vacancy import Vacancy
 
 
 class HHAPI:
@@ -28,7 +27,9 @@ class HHAPI:
         '''
         employer_list = []
         for employer_id in self.employers_list:
+
             response = requests.get(url=f'{self.__api}employers/{employer_id}').json()
+
             employer = Employer(
                 response['name'],
                 response['type'],
@@ -43,9 +44,3 @@ class HHAPI:
             employer_list.append(employer)
 
         return employer_list
-
-
-b = ['4370786']
-a = HHAPI(b)
-c = a.get_employers()
-
