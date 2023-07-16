@@ -28,8 +28,8 @@ class Employer:
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.name}, {self.type}, {self.area}, ' \
-               f'{self.description}, {self.employer_url}, {self.site_url}, ' \
-               f'{self.vacancies_url}, {self.open_vacancies})'
+               f'{self.description}, {self.__employer_url}, {self.__site_url}, ' \
+               f'{self.__vacancies_url}, {self.open_vacancies})'
 
     def __str__(self) -> str:
         return f'Работадель {self.name}'
@@ -40,64 +40,96 @@ class Employer:
         объекты класса Vacancy с дальнейшим помещением их в
         список self.vacancies_list
         '''
-        vacancies = requests.get(url=self.__vacancies_url).json()
+        page = 0
 
-        for vacancy in vacancies['items']:
-            vacancy_name = vacancy['name']
+        # цикл перебирает все вакансии автора
+        while True:
+            vacancies = requests.get(url=self.__vacancies_url, params={'page': page, 'per_page': 100}).json()
 
-            try:
-                vacancy_requirement = vacancy['snippet']['requirement']
-            except AttributeError:
-                vacancy_requirement = ''
+            if page == 20 or len(vacancies['items']) == 0:
+                break
 
-            try:
-                vacancy_responsibility = vacancy['snippet']['responsibility']
-            except AttributeError:
-                vacancy_responsibility = ''
+            for vacancy in vacancies['items']:
+                vacancy_name = vacancy['name']
 
-            vacancy_description = f'{vacancy_requirement} {vacancy_responsibility}'
-            vacancy_area = vacancy['area']['name']
+                try:
+                    vacancy_requirement = vacancy['snippet']['requirement']
+                except AttributeError:
+                    vacancy_requirement = ''
 
-            # проверка на то, что у вакансии указана зарплата
-            if vacancy['salary'] is None:
-                vacancy_salary_from = 0
-                vacancy_salary_to = 0
-                vacancy_currency = ''
-            else:
-                vacancy_salary_from = vacancy['salary']['from']
-                vacancy_salary_to = vacancy['salary']['to']
-                vacancy_currency = vacancy['salary']['currency']
+                try:
+                    vacancy_responsibility = vacancy['snippet']['responsibility']
+                except AttributeError:
+                    vacancy_responsibility = ''
 
-            vacancy_experience = vacancy['experience']['name']
-            vacancy_employment = vacancy['employment']['name']
-            vacancy_address = vacancy['address']
+                vacancy_description = f'{vacancy_requirement} {vacancy_responsibility}'
+                vacancy_area = vacancy['area']['name']
 
-            # проверка на то, что у вакансии указан адрес
-            if vacancy_address is None:
-                vacancy_address = 'Адресс не указан'
-            else:
-                if vacancy['address']['raw'] is None:
+                # проверка на то, что у вакансии указана зарплата
+                if vacancy['salary'] is None:
+                    vacancy_salary_from = 0
+                    vacancy_salary_to = 0
+                    vacancy_currency = 'RUR'
+                else:
+                    vacancy_salary_from = vacancy['salary']['from']
+                    vacancy_salary_to = vacancy['salary']['to']
+                    vacancy_currency = vacancy['salary']['currency']
+
+                vacancy_experience = vacancy['experience']['name']
+                vacancy_employment = vacancy['employment']['name']
+                vacancy_address = vacancy['address']
+
+                # проверка на то, что у вакансии указан адрес
+                if vacancy_address is None:
                     vacancy_address = 'Адресс не указан'
                 else:
-                    vacancy_address = vacancy['address']['raw']
+                    if vacancy['address']['raw'] is None:
+                        vacancy_address = 'Адресс не указан'
+                    else:
+                        vacancy_address = vacancy['address']['raw']
 
-            # устанавливает мин. зарплату 0, если её значение None
-            if vacancy_salary_from is None:
-                vacancy_salary_from = 0
+                # устанавливает мин. зарплату 0, если её значение None
+                if vacancy_salary_from is None:
+                    vacancy_salary_from = 0
 
-            # устанавливает макс. зарплату 0, если её значение None
-            if vacancy_salary_to is None:
-                vacancy_salary_to = 0
+                # устанавливает макс. зарплату 0, если её значение None
+                if vacancy_salary_to is None:
+                    vacancy_salary_to = 0
 
-            # создание объекта класса Vacancy и помещение его в список вакансий работадателя
-            self.vacancies_list.append(
-                Vacancy(
-                    vacancy_name, vacancy_description, vacancy_area,
-                    vacancy_salary_from, vacancy_salary_to, vacancy_currency,
-                    vacancy_experience, vacancy_employment,
-                    vacancy_address
+                # создание объекта класса Vacancy и помещение его в список вакансий работадателя
+                self.vacancies_list.append(
+                    Vacancy(
+                        vacancy_name, vacancy_description, vacancy_area,
+                        vacancy_salary_from, vacancy_salary_to, vacancy_currency,
+                        vacancy_experience, vacancy_employment,
+                        vacancy_address
+                    )
                 )
-            )
+
+            page += 1
+
+    def get_employer_inf(self) -> tuple:
+        '''
+        Возвращает кортеж, в котором содержится
+        вся информация о работадателе
+        :return: кортеж с информацией о работадателе
+        '''
+        # заменяет значение аттрибутов, содержащих в себе пустую строку, на None
+        for attribute_name, attribute_value in vars(self).items():
+            if attribute_value == '':
+                setattr(self, attribute_name, None)
+
+        employers_inf = (
+            self.name,
+            self.type,
+            self.area,
+            self.description,
+            self.employer_url,
+            self.site_url,
+            self.open_vacancies
+        )
+
+        return employers_inf
 
     @property
     def employer_url(self) -> str:
@@ -123,29 +155,3 @@ class Employer:
         :return: self.__vacancies_url
         '''
         return self.__vacancies_url
-
-    @staticmethod
-    def get_employers_inf(employer_list) -> list[tuple]:
-        '''
-        Возвращает список, в котором содержатся
-        кортежи, содержащие всю информацию о работадателе
-        :return: список кортежей с информацией о работадателях
-        '''
-        employers_inf_list = []
-
-        for employer in employer_list:
-            employers_inf_list.append(
-                (
-                    employer.name,
-                    employer.type,
-                    employer.area,
-                    employer.description,
-                    employer.employer_url,
-                    employer.site_url,
-                    employer.open_vacancies
-                )
-            )
-
-        return employers_inf_list
-
-
