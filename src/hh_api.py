@@ -27,7 +27,6 @@ class HHAPI:
         '''
         employer_list = []
         for employer_id in self.employers_list:
-
             response = requests.get(url=f'{self.__api}employers/{employer_id}').json()
 
             employer = Employer(
