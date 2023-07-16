@@ -7,8 +7,7 @@ class Vacancy:
     def __init__(
             self, name: str, description: str, area: str,
             salary_from: int, salary_to: int, currency: int,
-            experience: str, employment: str,
-            address: str
+            experience: str, employment: str, address: str
     ) -> None:
         self.name = name
         self.description = description
@@ -64,17 +63,22 @@ class Vacancy:
         return self.__salary_to
 
     @staticmethod
-    def get_vacamncy_inf(vacancies_list) -> list[tuple]:
+    def get_vacancies_inf(vacancies_list) -> list[list]:
         '''
         Возвращает список, в котором содержатся
-        кортежи, содержащие всю информацию о вакансии
-        :return: список кортежей с информацией о вакансии
+        списки. Каждый содержит всю информацию о вакансии
+        :return: список списков с информацией о вакансиях
         '''
         vacancies_inf_list = []
 
         for vacancy in vacancies_list:
+            # заменяет значение аттрибутов, содержащих в себе пустую строку, на None
+            for attribute_name, attribute_value in vars(vacancy).items():
+                if attribute_value == '':
+                    setattr(vacancy, attribute_name, None)
+
             vacancies_inf_list.append(
-                (
+                [
                     vacancy.name,
                     vacancy.description,
                     vacancy.area,
@@ -85,7 +89,7 @@ class Vacancy:
                     vacancy.experience,
                     vacancy.employment,
                     vacancy.address
-                )
+                ]
             )
 
         return vacancies_inf_list
