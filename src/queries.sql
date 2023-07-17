@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS vacancies
     experience varchar (25) NOT NULL,
     employment varchar (50) NOT NULL,
     address text,
+    url text NOT NULL,
 
     CONSTRAINT pk_vacancy_vacancy_id PRIMARY KEY(vacancy_id),
     CONSTRAINT fk_vacancy_employer_id FOREIGN KEY(employer_id) REFERENCES employers(employer_id)
