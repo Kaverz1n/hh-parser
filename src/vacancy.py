@@ -7,7 +7,8 @@ class Vacancy:
     def __init__(
             self, name: str, description: str, area: str,
             salary_from: int, salary_to: int, currency: int,
-            experience: str, employment: str, address: str
+            experience: str, employment: str, address: str,
+            url: str
     ) -> None:
         self.name = name
         self.description = description
@@ -18,6 +19,7 @@ class Vacancy:
         self.experience = experience
         self.employment = employment
         self.address = address
+        self.url = url
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.name}, {self.description},' \
@@ -88,7 +90,8 @@ class Vacancy:
                     vacancy.__currency,
                     vacancy.experience,
                     vacancy.employment,
-                    vacancy.address
+                    vacancy.address,
+                    vacancy.url
                 ]
             )
 
