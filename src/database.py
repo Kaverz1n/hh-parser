@@ -86,8 +86,8 @@ class DataBase:
 
                     cursor.execute(
                         'INSERT INTO vacancies (name, employer_id, description, area, salary_from, '
-                        'salary_to, salary, currency, experience, employment, address) '
-                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                        'salary_to, salary, currency, experience, employment, address, url) '
+                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                         vacancy_inf
                     )
 
@@ -107,3 +107,12 @@ class DataBase:
         :return: имя базы данных
         '''
         return self.__db_name
+
+    @property
+    def connection(self):
+        '''
+        Возвращает строку подключения к созданой бд
+        (необходимо для менеджера баз данных)
+        :return: строку подключения
+        '''
+        return self.__connection
