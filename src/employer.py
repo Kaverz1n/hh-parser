@@ -53,16 +53,20 @@ class Employer:
                 vacancy_name = vacancy['name']
 
                 try:
-                    vacancy_requirement = vacancy['snippet']['requirement']
+                     vacancy_requirement = vacancy['snippet']['requirement']
+                     if vacancy_requirement is None:
+                         raise AttributeError
                 except AttributeError:
                     vacancy_requirement = ''
 
                 try:
                     vacancy_responsibility = vacancy['snippet']['responsibility']
+                    if vacancy_responsibility is None:
+                        raise AttributeError
                 except AttributeError:
                     vacancy_responsibility = ''
 
-                vacancy_description = f'{vacancy_requirement} {vacancy_responsibility}'
+                vacancy_description = f'{vacancy_requirement} {vacancy_responsibility}'.strip()
                 vacancy_area = vacancy['area']['name']
 
                 # проверка на то, что у вакансии указана зарплата
@@ -78,6 +82,7 @@ class Employer:
                 vacancy_experience = vacancy['experience']['name']
                 vacancy_employment = vacancy['employment']['name']
                 vacancy_address = vacancy['address']
+                vacancy_url = vacancy['alternate_url']
 
                 # проверка на то, что у вакансии указан адрес
                 if vacancy_address is None:
@@ -101,8 +106,8 @@ class Employer:
                     Vacancy(
                         vacancy_name, vacancy_description, vacancy_area,
                         vacancy_salary_from, vacancy_salary_to, vacancy_currency,
-                        vacancy_experience, vacancy_employment,
-                        vacancy_address
+                        vacancy_experience, vacancy_employment, vacancy_address,
+                        vacancy_url
                     )
                 )
 
