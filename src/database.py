@@ -1,4 +1,5 @@
 import psycopg2
+import os
 
 from src.config import config
 from src.vacancy import Vacancy
@@ -24,7 +25,7 @@ class DataBase:
         self.__create_tables()
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.__db_name})'
+        return f"{self.__class__.__name__}('{self.__db_name}')"
 
     def __str__(self) -> str:
         return f'База данных {self.__db_name}'
@@ -54,11 +55,16 @@ class DataBase:
         '''
         # подключение к созданной бд
         connection = self.__connection
+        filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'queries.sql')
+
         with connection.cursor() as cursor:
             # создание таблиц в базе данных
-            with open('queries.sql', 'r', encoding='UTF-8') as sql_file:
+            with open(filepath, 'r', encoding='UTF-8') as sql_file:
                 commands = sql_file.read()
                 cursor.execute(commands)
+
+        connection.commit()
+
 
     def fill_data(self, employer_list: list) -> None:
         '''
