@@ -27,12 +27,12 @@ class Employer:
         self.__get_vacancies()
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.name}, {self.type}, {self.area}, ' \
-               f'{self.description}, {self.__employer_url}, {self.__site_url}, ' \
-               f'{self.__vacancies_url}, {self.open_vacancies})'
+        return f"{self.__class__.__name__}('{self.name}', '{self.type}', '{self.area}', " \
+               f"'{self.description}', '{self.__employer_url}', '{self.__site_url}', " \
+               f"'{self.__vacancies_url}', {self.open_vacancies})"
 
     def __str__(self) -> str:
-        return f'Работадель {self.name}'
+        return f'Работадатель {self.name}'
 
     def __get_vacancies(self) -> None:
         '''
