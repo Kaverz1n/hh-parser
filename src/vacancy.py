@@ -6,7 +6,7 @@ class Vacancy:
 
     def __init__(
             self, name: str, description: str, area: str,
-            salary_from: int, salary_to: int, currency: int,
+            salary_from: int, salary_to: int, currency: str,
             experience: str, employment: str, address: str,
             url: str
     ) -> None:
@@ -15,17 +15,17 @@ class Vacancy:
         self.area = area
         self.__salary_from = salary_from
         self.__salary_to = salary_to
-        self.__currency = currency
+        self.currency = currency
         self.experience = experience
         self.employment = employment
         self.address = address
         self.url = url
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.name}, {self.description},' \
-               f'{self.area}, {self.__salary_from},' \
-               f'{self.__salary_to}, {self.__currency}, {self.experience},' \
-               f'{self.employment}, {self.address}'
+        return f"{self.__class__.__name__}('{self.name}', '{self.description}', " \
+               f"'{self.area}', {self.__salary_from}, " \
+               f"{self.__salary_to}, '{self.currency}', '{self.experience}', " \
+               f"'{self.employment}', '{self.address}', '{self.url}')"
 
     def __str__(self) -> str:
         return f'Вакансия {self.name}'
@@ -87,7 +87,7 @@ class Vacancy:
                     vacancy.__salary_from,
                     vacancy.__salary_to,
                     vacancy.salary,
-                    vacancy.__currency,
+                    vacancy.currency,
                     vacancy.experience,
                     vacancy.employment,
                     vacancy.address,
