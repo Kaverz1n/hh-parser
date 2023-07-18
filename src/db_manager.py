@@ -11,7 +11,7 @@ class DBManager:
         self.__connection = database.connection
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.database})'
+        return f'{self.__class__.__name__}({type(self.database)})'
 
     def __str__(self) -> str:
         return 'Менеджер для работы с данными БД'
