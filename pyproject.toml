@@ -2,7 +2,7 @@
 name = "hh-parser"
 version = "0.2.0"
 description = ""
-authors = "Dmitry Kaptan (Kaverz1n)"
+authors = ["Dmitry Kaptan (Kaverz1n)"]
 readme = "README.md"
 packages = [{include = "hh_parser"}]
 
@@ -11,6 +11,11 @@ python = "^3.11"
 requests = "^2.31.0"
 psycopg2 = "^2.9.6"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.11.1"
 
 [build-system]
 requires = ["poetry-core"]
