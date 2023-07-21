@@ -1,6 +1,23 @@
+import psycopg2
+
+from src.config import config
 from src.hh_api import HHAPI
 from src.database import DataBase
 from src.db_manager import DBManager
+
+
+def delete_db(database_name: str) -> None:
+    '''
+    Удаляет базу данных по переданому имени
+    :param database_name: имя базы данных
+    '''
+    connection = psycopg2.connect(dbname='postgres', **config())
+    connection.autocommit = True
+
+    with connection.cursor() as cursor:
+        cursor.execute(f'DROP DATABASE IF EXISTS {database_name}')
+
+    connection.close()
 
 
 def create_db(database_name: str, employers_id_list: list) -> DataBase:
@@ -11,6 +28,7 @@ def create_db(database_name: str, employers_id_list: list) -> DataBase:
     :param employers_id_list: список id работадателей
     :return: база данных (object DataBase)
     '''
+    delete_db(database_name)
     api = HHAPI(employers_id_list)
     data_base = DataBase(database_name)
     data_base.fill_data(api.get_employers())
@@ -66,6 +84,7 @@ def choose_bd(employers_id_list: list) -> DataBase:
             print('Вы ввели что-то не то...')
 
     return database
+
 
 def menu(database: DataBase) -> None:
     '''
