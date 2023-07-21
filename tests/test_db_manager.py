@@ -27,11 +27,13 @@ def test_repr(db_manager_fixture) -> None:
 
     database.close_connection()
 
+
 def test_str(db_manager_fixture) -> None:
     database, db_manager = db_manager_fixture
     assert str(db_manager) == "Менеджер для работы с данными БД"
 
     database.close_connection()
+
 
 def test_get_companies_and_vacancies_count(database_fixture, employer_fixture) -> None:
     database = database_fixture
@@ -42,6 +44,7 @@ def test_get_companies_and_vacancies_count(database_fixture, employer_fixture) -
     assert db_manager.get_companies_and_vacancies_count() == [('name', 2)]
 
     database.close_connection()
+
 
 def test_get_all_vacancies(database_fixture, employer_fixture) -> None:
     database = database_fixture
@@ -56,6 +59,7 @@ def test_get_all_vacancies(database_fixture, employer_fixture) -> None:
 
     database.close_connection()
 
+
 def test_get_avg_salary(database_fixture, employer_fixture) -> None:
     database = database_fixture
     employer = employer_fixture
@@ -65,6 +69,7 @@ def test_get_avg_salary(database_fixture, employer_fixture) -> None:
     assert db_manager.get_avg_salary() == 77500
 
     database.close_connection()
+
 
 def test_get_vacancies_with_higher_salary(database_fixture, employer_fixture) -> None:
     database = database_fixture
@@ -78,6 +83,7 @@ def test_get_vacancies_with_higher_salary(database_fixture, employer_fixture) ->
          'https://hh.ru/vacancy/83176475')]
 
     database.close_connection()
+
 
 def test_get_vacancies_with_keyword(database_fixture, employer_fixture) -> None:
     database = database_fixture
