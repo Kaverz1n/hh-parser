@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS employers
     description text,
     employer_url text NOT NULL,
     site_url text,
-    open_vacancies smallint NOT NULL,
+    open_vacancies int NOT NULL,
 
     CONSTRAINT pk_employer_employer_id PRIMARY KEY(employer_id)
 );
