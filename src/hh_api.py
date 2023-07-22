@@ -1,4 +1,5 @@
 import requests
+import re
 
 from src.employer import Employer
 
@@ -30,11 +31,17 @@ class HHAPI:
             response = requests.get(url=f'{self.__api}employers/{employer_id}').json()
 
             try:
+                try:
+                    pattern = r'<.*?>|&quot;'
+                    description = re.sub(pattern, '', response['description'])
+                except TypeError:
+                    description = response['description']
+
                 employer = Employer(
                     response['name'],
                     response['type'],
                     response['area']['name'],
-                    response['description'],
+                    description,
                     response['alternate_url'],
                     response['site_url'],
                     response['vacancies_url'],
